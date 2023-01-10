@@ -7,6 +7,7 @@ import Stack from 'react-bootstrap/Stack'
 import Container from 'react-bootstrap/Container';
 
 
+
 export function Home() {
   const [validated, setValidated] = useState(false);
 
@@ -24,29 +25,28 @@ export function Home() {
     <Container fluid>
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Stack gap={3}>
-      <Stack gap={1}>
         <Form.Group as={Col} md="3" controlId="validationFullName">
           <Form.Label>Full Name</Form.Label>
+          <InputGroup hasValidation>
           <Form.Control
             required
             type="text"
             placeholder="Full Name"
           />
-          <Form.Control.Feedback>Please provide your full name!</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">Please provide your full name!</Form.Control.Feedback>
+          </InputGroup>
         </Form.Group>
-      </Stack>
-      <Stack gap={1}>
         <Form.Group as={Col} md="4" controlId="validationEmail">
           <Form.Label>Email</Form.Label>
+          <InputGroup hasValidation>
           <Form.Control
             required
             type="email"
             placeholder="Please enter a valid email"
           />
-          <Form.Control.Feedback>Please provide your email address!</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">Please provide your email address!</Form.Control.Feedback>
+          </InputGroup>
         </Form.Group>
-        </Stack>
-        <Stack gap={1}>
         <Form.Group as={Col} md="5" controlId="validationCustomPassword">
           <Form.Label>Password</Form.Label>
           <InputGroup hasValidation>
@@ -60,8 +60,6 @@ export function Home() {
             </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
-      </Stack>
-      <Stack gap={3}>
         <Form.Group as={Col} md="4" controlId="validationOccupation">
           <Form.Label>Occupation</Form.Label>
           <Form.Control type="text" placeholder="Current Occupation" required />
@@ -69,8 +67,6 @@ export function Home() {
             What is your most recent occupation?
           </Form.Control.Feedback>
         </Form.Group>
-        </Stack>
-        <Stack gap={1}>
         <Form.Group as={Col} md="3" controlId="validationCustom04">
           <Form.Label>State</Form.Label>
           <Form.Control type="text" placeholder="What State do you live in?" required />
@@ -78,12 +74,10 @@ export function Home() {
             Please provide a valid state.
           </Form.Control.Feedback>
         </Form.Group>
-      </Stack>
-      <Stack  gap={1}>
-      <Button as={Col} md="2" type="submit" variant="primary" size="md">Submit form</Button>
-      </Stack>
+        <Button type="submit" size="md">Submit form</Button>
       </Stack>
     </Form>
-    </Container>
+  </Container>
   );
 }
+
