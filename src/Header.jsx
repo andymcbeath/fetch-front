@@ -3,7 +3,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 export function Header() {
   return (
-  <Navbar sticky="top">
+  <Navbar fluid sticky="top">
     <Container>
       <Navbar.Brand href="#home">
         <img

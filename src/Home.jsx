@@ -10,8 +10,8 @@ import Container from 'react-bootstrap/Container';
 export function Home() {
   const [validated, setValidated] = useState(false);
   const [data, setData] = useState([]);
-  const [selectedOption, setSelectedOption] = useState('');
-
+  const [selectedOccupation, setSelectedOccupation] = useState('');
+  const [selectedState, setSelectedState] = useState('');
 
   useEffect(() => {
     axios.get('https://frontend-take-home.fetchrewards.com/form')
@@ -29,20 +29,41 @@ export function Home() {
     ? states.map((item) => <option key={item.name} value={item.abbreviation}> {item.abbreviation} - {item.name}</option>)
     : [];
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    const handleSubmit = (event) => {
+      if(!data) return;
       event.preventDefault();
-      event.stopPropagation();
-    }
+      const formData = {
+        name: event.target.elements.name.value,
+        email: event.target.elements.email.value,
+        password: event.target.elements.password.value,
+        occupation: selectedOccupation,
+        state: selectedState
+      };
+    
+      axios.post("https://frontend-take-home.fetchrewards.com/form", formData)
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      const form = event.currentTarget;
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      setValidated(true);
+    };
+    
+    
+  
 
-    setValidated(true);
-  };
-
-  return (
-    <Container-fluid >
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <Stack gap={3}>
+    return data.length === 0 ? (
+      <div>Loading...</div>
+    ) : (
+      <Container fluid>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Stack gap={3}>
         <Form.Group as={Col} md="3" controlId="validationFullName">
           <Form.Label>Full Name</Form.Label>
           <InputGroup hasValidation>
@@ -50,6 +71,7 @@ export function Home() {
             required
             type="text"
             placeholder="Full Name"
+            name="name"
           />
           <Form.Control.Feedback type="invalid">Please provide your full name!</Form.Control.Feedback>
           </InputGroup>
@@ -62,6 +84,7 @@ export function Home() {
             required
             type="email"
             placeholder="Please enter a valid email"
+            name="email"
           />
           <Form.Control.Feedback type="invalid">Please provide your email address!</Form.Control.Feedback>
           </InputGroup>
@@ -70,9 +93,10 @@ export function Home() {
           <Form.Label>Password</Form.Label>
           <InputGroup hasValidation>
             <Form.Control
-            required
+              required
               type="password"
               placeholder="Use an incredibly unique password!"
+              name="password"
             />
             <Form.Control.Feedback type="invalid">
               Please type in your password.
@@ -82,12 +106,14 @@ export function Home() {
 
         <Form.Group as={Col} md="5" controlId="validationCustomOccupation">
           <Form.Label>Occupation</Form.Label>
-            <InputGroup has validation>
+            <InputGroup hasValidation>
             <Form.Select required 
-              className="form-control" value={selectedOption} onChange={e => setSelectedOption(e.target.value)}>
-            <option value="">Select your current occupation</option>
-            {options}
-          </Form.Select>
+              className="form-control" 
+              value={selectedOccupation} 
+              onChange={e => setSelectedOccupation(e.target.value)} name="occupation">
+              {options}
+              
+            </Form.Select>
           <Form.Control.Feedback type="invalid">
             Please select your current occupation
           </Form.Control.Feedback>
@@ -96,11 +122,12 @@ export function Home() {
 
         <Form.Group as={Col} md="5" controlId="validationState">
           <Form.Label>State</Form.Label>
-            <InputGroup has validation>
-            <Form.Select 
-              className="form-control" value={selectedOption} closeMenuOnSelect={true} onChange={e => setSelectedOption(e.target.value)} required>
-            <option value="">Select the current state you reside in</option>
-            {options2}
+            <InputGroup hasValidation>
+            <Form.Select required 
+              className="form-control" 
+              value={selectedState} 
+              onChange={e => setSelectedState(e.target.value)} name="State">
+              {options2}
             </Form.Select>
             <Form.Control.Feedback type="invalid">
               Please select the current state you live in
@@ -108,10 +135,10 @@ export function Home() {
           </InputGroup>
         </Form.Group>
 
-        <Button type="submit" size="md" >Submit form</Button>
+        <Button type="submit" onClick={(e) => handleSubmit(e, selectedOccupation, selectedState)}>Submit</Button>
       </Stack>
     </Form>
-    </Container-fluid>
+    </Container>
   );
 }
 
