@@ -40,7 +40,7 @@ export function Home() {
   };
 
   return (
-    <Container fluid>
+    <Container-fluid >
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Stack gap={3}>
         <Form.Group as={Col} md="3" controlId="validationFullName">
@@ -98,7 +98,7 @@ export function Home() {
           <Form.Label>State</Form.Label>
             <InputGroup has validation>
             <Form.Select 
-              className="form-control" value={selectedOption} onChange={e => setSelectedOption(e.target.value)} required>
+              className="form-control" value={selectedOption} closeMenuOnSelect={true} onChange={e => setSelectedOption(e.target.value)} required>
             <option value="">Select the current state you reside in</option>
             {options2}
             </Form.Select>
@@ -108,10 +108,10 @@ export function Home() {
           </InputGroup>
         </Form.Group>
 
-        <Button type="submit" size="md">Submit form</Button>
+        <Button type="submit" size="md" >Submit form</Button>
       </Stack>
     </Form>
-    </Container>
+    </Container-fluid>
   );
 }
 

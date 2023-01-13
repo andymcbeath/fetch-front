@@ -5,4 +5,15 @@ html {
 .btn {
   display: flex;
   max-width: fit-content;
+
 }
+
+body {
+  background: linear-gradient(90deg, #fcff9e 0%, #c67700 100%);
+  
+  
+font-family:AmericanTypewriter, paletino, 'Arial Narrow Bold', sans-serif;
+font-size: large;
+color: black;
+}
+
