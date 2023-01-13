@@ -7,7 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Stack from 'react-bootstrap/Stack'
 import Container from 'react-bootstrap/Container';
 
-export function Example() {
+export function Home() {
   const [validated, setValidated] = useState(false);
   const [data, setData] = useState([]);
   const [selectedOption, setSelectedOption] = useState('');
@@ -19,8 +19,15 @@ export function Example() {
       .catch(err => console.log(err));
   }, []);
 
-  const options = data.occupations?.map(item => <option key={item.occupations} value={item.occupations}>{item}</option>);
-  const options2 = data.states?.map(item => <option key={item.name} value={item.abbreviation}>{item.abbreviation} - {item.name}</option>);
+  const { occupations } = data;
+  const options = occupations
+  ? occupations.map((item) => <option key={item} value={item}>{item}</option>)
+  : [];
+
+  const { states } = data;
+  const options2 = states
+    ? states.map((item) => <option key={item.name} value={item.abbreviation}> {item.abbreviation} - {item.name}</option>)
+    : [];
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -47,6 +54,7 @@ export function Example() {
           <Form.Control.Feedback type="invalid">Please provide your full name!</Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
+
         <Form.Group as={Col} md="4" controlId="validationEmail">
           <Form.Label>Email</Form.Label>
           <InputGroup hasValidation>
@@ -72,17 +80,39 @@ export function Example() {
           </InputGroup>
         </Form.Group>
 
-<select className="form-control" value={selectedOption} onChange={e => setSelectedOption(e.target.value)}>
-{options}
-</select>
-<select className="form-control" value={selectedOption} onChange={e => setSelectedOption(e.target.value)}>
-{options2}
-</select>
-<Button type="submit" size="md">Submit form</Button>
-</Stack>
-</Form>
-</Container>
-  );
-  }
+        <Form.Group as={Col} md="5" controlId="validationCustomOccupation">
+          <Form.Label>Occupation</Form.Label>
+            <InputGroup has validation>
+            <Form.Select required 
+              className="form-control" value={selectedOption} onChange={e => setSelectedOption(e.target.value)}>
+            <option value="">Select your current occupation</option>
+            {options}
+          </Form.Select>
+          <Form.Control.Feedback type="invalid">
+            Please select your current occupation
+          </Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
 
-export default Example;
+        <Form.Group as={Col} md="5" controlId="validationState">
+          <Form.Label>State</Form.Label>
+            <InputGroup has validation>
+            <Form.Select 
+              className="form-control" value={selectedOption} onChange={e => setSelectedOption(e.target.value)} required>
+            <option value="">Select the current state you reside in</option>
+            {options2}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Please select the current state you live in
+            </Form.Control.Feedback>
+          </InputGroup>
+        </Form.Group>
+
+        <Button type="submit" size="md">Submit form</Button>
+      </Stack>
+    </Form>
+    </Container>
+  );
+}
+
+export default Home;

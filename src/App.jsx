@@ -1,5 +1,5 @@
 import { Header } from "./Header";
-import { Example } from "./Home";
+import { Home } from "./Home";
 import { Footer } from "./Footer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ThemeProvider from 'react-bootstrap/ThemeProvider'
@@ -13,7 +13,7 @@ function App() {
     >
     <div>
       <Header />
-      <Example />
+      <Home />
       <Footer />
     </div>
     </ThemeProvider>
