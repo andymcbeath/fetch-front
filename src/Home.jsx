@@ -30,8 +30,12 @@ export function Home() {
     : []
 
   const handleSubmit = (event) => {
-    if (!data) return
-    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    setValidated(true)
     const formData = {
       name: event.target.elements.name.value,
       email: event.target.elements.email.value,
@@ -42,24 +46,17 @@ export function Home() {
 
     axios.post("https://frontend-take-home.fetchrewards.com/form", formData)
       .then(response => {
-        console.log(response)
+        console.log(response);
+        console.log(response.status);
       })
       .catch(error => {
-        console.log(error);
+        console.log(error)
+        console.log(error.response);
+        console.log(error.response.status);
       });
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
-    setValidated(true)
   }
 
-  return data.length === 0
-    ? (
-      <div>Loading...</div>
-      )
-    : (
+  return (
       <Container fluid>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Stack gap={3}>
@@ -107,13 +104,14 @@ export function Home() {
           <Form.Label>Occupation</Form.Label>
             <InputGroup hasValidation>
             <Form.Select required 
-              className="form-control" 
+              className="custom-select" 
               value={selectedOccupation} 
               onChange={e => setSelectedOccupation(e.target.value)} name="occupation">
+                <option value="">Select Occupation</option>
               {options}
             </Form.Select>
           <Form.Control.Feedback type="invalid">
-            Please select your current occupation
+            Please select your current occupation!
           </Form.Control.Feedback>
           </InputGroup>
         </Form.Group>
@@ -122,9 +120,10 @@ export function Home() {
           <Form.Label>State</Form.Label>
             <InputGroup hasValidation>
             <Form.Select required 
-              className="form-control" 
+              className="custom-select" 
               value={selectedState} 
-              onChange={e => setSelectedState(e.target.value)} name="State">
+              onChange={e => setSelectedState(e.target.value)} name="state">
+                <option value="">Please select what state you currently live in!</option>
               {options2}
             </Form.Select>
             <Form.Control.Feedback type="invalid">
