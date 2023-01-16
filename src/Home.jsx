@@ -19,7 +19,6 @@ export function Home () {
   const [selectedPassword, setSelectedPassword] = useState('')
   const [selectedFullName, setSelectedFullName] = useState('')
 
-
   useEffect(() => {
     axios.get('https://frontend-take-home.fetchrewards.com/form')
       .then(res => setData(res.data))
@@ -37,13 +36,7 @@ export function Home () {
     : []
 
   const handleSubmit = (event) => {
-
-    const form = event.currentTarget
-    if (form.checkValidity() === false) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
-
+    event.preventDefault();
     setValidated(true)
     const formData = {
       name: selectedFullName,
@@ -51,17 +44,16 @@ export function Home () {
       password: selectedPassword,
       occupation: selectedOccupation,
       state: selectedState
-
     }
 
     axios.post('https://frontend-take-home.fetchrewards.com/form', formData)
       .then(response => {
-        console.log('hello response')
+        console.log('Form submitted successfully')
         console.log(response)
         console.log(response.status)
       })
       .catch(error => {
-        console.log('hello error')
+        console.log('Form submission failed')
         console.log(error)
         console.log(error.response)
       })
@@ -92,7 +84,6 @@ export function Home () {
             required
             type="email"
             placeholder="Please enter a valid email"
-            name="email"
             value={selectedEmail}
             onChange={e => setSelectedEmail(e.target.value)} name="email"/>
           <Form.Control.Feedback type="invalid">Please provide your email address!</Form.Control.Feedback>
