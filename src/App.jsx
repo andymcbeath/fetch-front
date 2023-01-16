@@ -1,10 +1,10 @@
 import { Header } from './Header'
-import { Home } from './Home';
+import { Home } from './Home'
+import React from 'react'
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
-
-function App() {
+function App () {
   return (
     <div>
       <Header />
@@ -13,4 +13,4 @@ function App() {
   )
 }
 
-export default App;
+export default App

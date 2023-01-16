@@ -1,7 +1,8 @@
-import Container from 'react-bootstrap/Container';
-import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar'
+import React from 'react'
 
-export function Header() {
+export function Header () {
   return (
   <Navbar fluidsticky="top">
     <Container>
@@ -17,7 +18,7 @@ export function Header() {
       </Navbar.Brand>
     </Container>
   </Navbar>
-  );
+  )
 }
 
-export default Header;
+export default Header
