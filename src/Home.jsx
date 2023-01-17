@@ -7,17 +7,14 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import Stack from 'react-bootstrap/Stack'
 import Container from 'react-bootstrap/Container'
 
-// this function seems big?
-// seperate get request
-// seperate
 export function Home () {
-  const [validated, setValidated] = useState(false)
   const [data, setData] = useState([])
   const [selectedOccupation, setSelectedOccupation] = useState('')
   const [selectedState, setSelectedState] = useState('')
   const [selectedEmail, setSelectedEmail] = useState('')
   const [selectedPassword, setSelectedPassword] = useState('')
   const [selectedFullName, setSelectedFullName] = useState('')
+  const [validated, setValidated] = useState(false)
 
   useEffect(() => {
     axios.get('https://frontend-take-home.fetchrewards.com/form')
@@ -36,8 +33,7 @@ export function Home () {
     : []
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    setValidated(true)
+    const form = event.currentTarget
     const formData = {
       name: selectedFullName,
       email: selectedEmail,
@@ -45,103 +41,108 @@ export function Home () {
       occupation: selectedOccupation,
       state: selectedState
     }
-
-    axios.post('https://frontend-take-home.fetchrewards.com/form', formData)
-      .then(response => {
-        console.log('Form submitted successfully')
-        console.log(response)
-        console.log(response.status)
-      })
-      .catch(error => {
-        console.log('Form submission failed')
-        console.log(error)
-        console.log(error.response)
-      })
+    if (form.checkValidity() === false) {
+      event.preventDefault()
+      event.stopPropagation()
+    } else {
+      axios.post('https://frontend-take-home.fetchrewards.com/form', formData)
+        .then(response => {
+          console.log('Form submitted successfully')
+          console.log(response)
+          console.log(response.status)
+        })
+        .catch(error => {
+          console.log('Form submission failed')
+          console.log(error)
+          console.log(error.response)
+        })
+    }
+    setValidated(true)
   }
 
   return (
       <Container fluid>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Stack gap={3}>
-        <Form.Group as={Col} md="3" controlId="validationFullName">
-          <Form.Label>Full Name</Form.Label>
-          <InputGroup hasValidation>
-          <Form.Control
-            required
-            type="text"
-            placeholder="Full Name"
-            name="name"
-            value={selectedFullName}
-            onChange={e => setSelectedFullName(e.target.value)}/>
-          <Form.Control.Feedback type="invalid">Please provide your full name!</Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+            <Form.Group as={Col} md="3" controlId="validationFullName">
+              <Form.Label>Full Name</Form.Label>
+              <InputGroup hasValidation>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Full Name"
+                name="name"
+                value={selectedFullName}
+                onChange={e => setSelectedFullName(e.target.value)}/>
+              <Form.Control.Feedback type="invalid">Please provide your full name!</Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
 
-        <Form.Group as={Col} md="4" controlId="validationEmail">
-          <Form.Label>Email</Form.Label>
-          <InputGroup hasValidation>
-          <Form.Control
-            required
-            type="email"
-            placeholder="Please enter a valid email"
-            value={selectedEmail}
-            onChange={e => setSelectedEmail(e.target.value)} name="email"/>
-          <Form.Control.Feedback type="invalid">Please provide your email address!</Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+            <Form.Group as={Col} md="4" controlId="validationEmail">
+              <Form.Label>Email</Form.Label>
+              <InputGroup hasValidation>
+              <Form.Control
+                required
+                type="email"
+                placeholder="Please enter a valid email"
+                value={selectedEmail}
+                onChange={e => setSelectedEmail(e.target.value)} name="email"/>
+              <Form.Control.Feedback type="invalid">Please provide your email address!</Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
 
-        <Form.Group as={Col} md="5" controlId="validationCustomPassword">
-          <Form.Label>Password</Form.Label>
-          <InputGroup hasValidation>
-            <Form.Control
-              required
-              type="password"
-              value={selectedPassword}
-              placeholder="Use an incredibly unique password!"
-              name="password"
-              onChange={e => setSelectedPassword(e.target.value)}/>
-            <Form.Control.Feedback type="invalid">
-              Please type in your password!
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+            <Form.Group as={Col} md="5" controlId="validationCustomPassword">
+              <Form.Label>Password</Form.Label>
+              <InputGroup hasValidation>
+                <Form.Control
+                  required
+                  type="password"
+                  value={selectedPassword}
+                  placeholder="Use an incredibly unique password!"
+                  name="password"
+                  onChange={e => setSelectedPassword(e.target.value)}/>
+                <Form.Control.Feedback type="invalid">
+                  Please type in your password!
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
 
-        <Form.Group as={Col} md="5" controlId="validationCustomOccupation">
-          <Form.Label>Occupation</Form.Label>
-            <InputGroup hasValidation>
-            <Form.Select required
-              className="custom-select"
-              value={selectedOccupation}
-              onChange={e => setSelectedOccupation(e.target.value)} name="occupation">
-                <option value="">Select Your Occupation</option>
-              {options}
-            </Form.Select>
-          <Form.Control.Feedback type="invalid">
-            Please select your current occupation!
-          </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+            <Form.Group as={Col} md="5" controlId="validationCustomOccupation">
+              <Form.Label>Occupation</Form.Label>
+                <InputGroup hasValidation>
+                <Form.Select required
+                  className="custom-select"
+                  value={selectedOccupation}
+                  onChange={e => setSelectedOccupation(e.target.value)} name="occupation">
+                    <option value="">Select Your Occupation</option>
+                  {options}
+                </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Please select your current occupation!
+              </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
 
-        <Form.Group as={Col} md="5" controlId="validationState">
-          <Form.Label>State</Form.Label>
-            <InputGroup hasValidation>
-            <Form.Select required
-              className="custom-select"
-              value={selectedState}
-              onChange={e => setSelectedState(e.target.value)} name="state">
-                <option value="">Please select what state you currently live in!</option>
-              {options2}
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              Please select the current state you live in!
-            </Form.Control.Feedback>
-          </InputGroup>
-        </Form.Group>
+            <Form.Group as={Col} md="5" controlId="validationState">
+              <Form.Label>State</Form.Label>
+                <InputGroup hasValidation>
+                <Form.Select required
+                  className="custom-select"
+                  value={selectedState}
+                  onChange={e => setSelectedState(e.target.value)} name="state">
+                    <option value="">Please select what state you currently live in!</option>
+                  {options2}
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  Please select the current state you live in!
+                </Form.Control.Feedback>
+              </InputGroup>
+            </Form.Group>
 
-        <Button type="submit" onClick={(e) => handleSubmit(e, selectedOccupation, selectedState, selectedPassword, selectedFullName, selectedEmail)}>Submit</Button>
-      </Stack>
-    </Form>
-    </Container>
+             <Button type="submit">Submit</Button>
+          </Stack>
+        </Form>
+      </Container>
   )
 }
 
